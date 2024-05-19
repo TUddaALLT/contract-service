@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     Optional<User> findById(String id);
 
-    Optional<User> findByEmailAndStatus(String email, String status);
+    Optional<User> findByEmailAndStatus(String email, UserStatus status);
 
     @Query(value = """
         SELECT u.id,u.name, u.email, u.address,
@@ -41,8 +41,7 @@ public interface UserRepository extends JpaRepository<User, String> {
                                            and (lower(u.role) like lower(:role) or :role is null)
                            GROUP BY u.id, u.name, u.email, u.address,
                                     u.identification_number, u.status, u.department, u.phone, u.position
-                           
-            """
+        """
             , nativeQuery = true)
     Page<UserInterface> search(@Param("name") String name,
                                @Param("email") String email,
